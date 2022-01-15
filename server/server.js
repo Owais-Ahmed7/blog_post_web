@@ -1,4 +1,8 @@
 import express from "express";
+import cors from "cors";
+import { connectDB } from "./config/db.js";
+
+import apiRoutes from "./routes/posts.route.js";
 
 const app = express();
 
@@ -9,8 +13,11 @@ app.use(express.urlencoded({extended: true, limit: "30mb"}));
 app.use(express.json({extended: true, limit: "30mb"}));
 app.use(cors());
 
+//mongodb connection
+connectDB;
+
 //application routes
-app.use(ApiRoutes);
+app.use("/posts", apiRoutes);
 
 
 //port listening
