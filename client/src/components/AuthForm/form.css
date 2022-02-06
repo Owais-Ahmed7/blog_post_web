@@ -1,0 +1,44 @@
+.input-group-wrap {
+    position: relative;
+}
+
+.input-group-wrap input {
+    width: 100%;
+    padding: 10px 0;
+    font-size: 1rem;
+    letter-spacing: 1px;
+    margin-bottom: 30px;
+    border: none;
+    border-bottom: 1px solid white;
+    outline: none;
+    background-color: black !important;
+    color: inherit;
+}
+
+.input-group-wrap label {
+    position: absolute;
+    left: 0;
+    top: 0;
+    padding: 10px 0;
+    font-size: 1rem;
+    pointer-events: none;
+    transition: .3s ease-out;
+}
+
+.input-group-wrap input:focus + label,
+.input-group-wrap input:valid + label {
+    transform: translateY(-18px);
+    color: #ff652f;
+    font-size: .8rem;
+}
+
+/* .input-group-wrap input::before + label {
+    transform: translateY(0);
+} */
+
+/* .input-group-wrap input:valid + label {
+    transform: translateY(-18px);
+    color: #ff652f;
+    font-size: .8rem;
+    border-bottom: 1px solid #E60965;
+} */

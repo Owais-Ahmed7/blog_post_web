@@ -1,68 +1,118 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import ManLaptop from "../../assets/form-background/man-laptop.jpg";
+import validator from "validator";
+import { useDispatch } from "react-redux";
+import { userSignUp, userSignIn } from "../../store/actions/user";
 
 //icons
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
-// const props = ({
-//     formHeading, 
-//     userType, 
-//     userPlaceholder, 
-//     passowrdType, 
-//     passwordPlaceholder,
-//     confPassdisplay,
-//     confPassPlaceholder,
-//     forgetDisplay,
-//     formButton
-// })
-
 const AuthForm = (props) => {
+
+    const [ userData, setUserData ] = useState({
+        email: "",
+        password: "",
+        confPassword: ""        
+    })
 
     console.log(props)
     //display props
     const confPassDisplay = props.confPassDisplay;
     const forgPassDisplay = props.forgPassDisplay;
 
+    //password
     const [passowrdType, setPasswordType] = useState("password");
     const [showPassword, setShowPassword] = useState(false);
 
+    //confirm password
+    const [confPassType, setConfPassType] = useState("password");
+    const [showConfPass, setShowConfPass] = useState(false);
+
+    //for password
     function ShowPassword() {
         setShowPassword(true);
         setPasswordType("text");
     }
-
     function HidePassword() {
         setShowPassword(false);
         setPasswordType("password");
     }
 
-    return  <Box>
+    //for confirm password
+    function ShowConfPassword() {
+        setShowConfPass(true);
+        setConfPassType("text");
+    }
+    function HideConfPassword() {
+        setShowConfPass(false);
+        setConfPassType("password");
+    }
+
+    const dispatch = useDispatch();
+    //user Submit
+    function userSubmit(e) {
+        e.preventDefault();
+        if(validator.isEmail(userData.email) && props.formHeading === 'Signup'){
+            dispatch(userSignUp(userData));
+            console.log("Emial valid signUp successful");
+            res.redirect("/");
+        }else if (validator.isEmail(userData.email) && props.formHeading === 'Login') { 
+            dispatch(userSignIn(userData));
+            console.log("Emial valid logIn successful");
+            res.redirect("/");
+        } else {
+            console.log("Emial Invalid");
+        }
+    }
+
+    return  <Box style={{backgroundImage: `url(${ManLaptop})`}}>
         <FormBox>
             <Heading>{props.formHeading}</Heading>
-            <Form>
+            <Form methode="Post" path={props.postPath} >
                 {/* userInput */}
-                <UserInput type={props.userType} autoComplete="off" placeholder={props.userPlaceholder} />
+                <UserInput 
+                  name="email" 
+                  value={userData.email} 
+                  type={props.userType} 
+                  autoComplete="off" 
+                  placeholder={props.userPlaceholder} 
+                  onChange={(e) => setUserData({...userData, email: e.target.value})}
+                />
                 {/* password */}
                 <PasswordWraper>
-                    <PasswordInput type={passowrdType} autoComplete="off" placeholder={props.passwordPlaceholder} />
+                    <PasswordInput 
+                      value={userData.confPassword} 
+                      name="password" 
+                      type={passowrdType} 
+                      autoComplete="off" 
+                      placeholder={props.passwordPlaceholder} 
+                      onChange={(e) => setUserData({...userData, confPassword: e.target.value})}
+                    />
                     {showPassword 
                     ? <StikedEyeIcon onClick={HidePassword}/> 
                     : <EyeIcon onClick={ShowPassword} /> }
                 </PasswordWraper>
                 {/* confirm password  */}
                 <PasswordWraper style={{display: confPassDisplay}}>
-                    <PasswordInput type={passowrdType} placeholder={props.confPassPlaceholder} />
-                    {showPassword 
-                    ? <StikedEyeIcon onClick={HidePassword}/> 
-                    : <EyeIcon onClick={ShowPassword} /> }
+                    <PasswordInput 
+                      value={userData.password} 
+                      name="confirmPassword" 
+                      type={confPassType} 
+                      placeholder={props.confPassPlaceholder} 
+                      onChange={(e) => setUserData({...userData, password: e.target.value})}
+                    />
+                    {showConfPass 
+                    ? <StikedEyeIcon onClick={HideConfPassword}/> 
+                    : <EyeIcon onClick={ShowConfPassword} /> }
                 </PasswordWraper>
             </Form>
             {/* forgot Password */}
             <ForgetPassword style={{display: forgPassDisplay}} to="/log-in/forgot-passowrd" >Forget Password?</ForgetPassword>
             {/* submit button */}
-            <Button>
+            <Button onClick={userSubmit}>
                 {props.formButton}
             </Button>
         </FormBox>
@@ -72,11 +122,17 @@ const AuthForm = (props) => {
 export default AuthForm;
 
 const Box = styled.div`
-font-family: 'Montserrat', sans-serif;
-    background: linear-gradient(128deg, dodgerblue, #E60965);
+    font-family: 'Montserrat', sans-serif;
+    background: transparent;
     display: grid;
-    height: 87.5vh;
     place-items: center;
+    width: 100%;
+    height: calc(100vh - 80px);
+    place-items: center;
+    object-fit: cover;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: 150% 44%;
 `;
 
 const FormBox = styled.div`
@@ -85,7 +141,8 @@ const FormBox = styled.div`
     flex-direction: column;
     font-family: 'Montserrat', sans-serif;
     padding: 5rem 5rem;
-    background: #fff;
+    background: transparent;
+    background: rgba(0,0,0,0.4);
     border-radius: 3px;
     box-shadow: 2px 5px 10px grey;
 
@@ -123,7 +180,7 @@ const UserInput = styled.input`
     width: 100%;
     outline: none;
     color: #080808;
-    font-size: 0.9rem;
+    font-size: 1rem;
     background-color: #EEEEEE !important;
 
     :hover {
@@ -173,9 +230,9 @@ const PasswordInput = styled.input`
     border-bottom: 2px solid #E60965;
     padding: 7px 5px;
     width: 100%;
+    font-size: 1rem;
     outline: none;
-    color: #fff;
-    font-size: 0.9rem;
+    color: #080808;
     background-color: #EEEEEE !important;
 
     :hover {
@@ -195,7 +252,7 @@ const ForgetPassword = styled(Link)`
     font-weight: 500;
     margin-bottom: 20px;
     cursor: pointer;
-    color: #080808;
+    color: #fff;
     text-decoration-line: none;
     text-underline-position: none;
 
@@ -210,6 +267,8 @@ const Button = styled.button`
     font-weight: bold;
     border-style: none;
     border-radius: 5px;
+    font-size: 1rem;
+    letter-spacing: 1px;
     border: 2px solid dodgerblue;
 
     :hover {
