@@ -1,11 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styled from  "styled-components";
 import "./form.css"
-//material ui
-import Button from '@mui/material/Button';
-import Input from '@mui/material/Input';
+import { useDispatch, useSelector } from "react-redux";
+import { createPost, updatePost } from "../../store/actions/posts";
+import FileBase64 from "react-file-base64"
 
-const Form = () => {
+
+const Form = ({ currentId, setCurrentId, setPostCreated, postCreated }) => {
 
     const [postData, setPostData] = useState({
         creator: "",
@@ -13,15 +14,29 @@ const Form = () => {
         message: "",
         tags: "",
         selectedFile: ""
-    })
+    });
+    const post = useSelector((state) => currentId ? state.posts.find((post) => post._id === currentId) : null); 
+    const dispatch = useDispatch();
 
-    function onSubmit() {
-        
+    useEffect(() => {
+        if(post) setPostData(post);
+    },[post])
+
+    function onSubmit(e) {
+        e.preventDefault();
+        if(currentId) {
+            dispatch(updatePost(currentId, postData));
+        }else {
+            dispatch(createPost(postData));
+            setPostCreated(!postCreated);
+        }
+        setPostData({ creator:"", title:"",message: "",tags: "",selectedFile: ""});
+        setCurrentId(null);
     }
 
     return <>
-        <PostForm methode="Post" path="http://localhost:5000/posts">
-            <FormHeading>Create Post</FormHeading>
+        <PostForm methode="Post" path="http://localhost:5000/posts/">
+            <FormHeading>{ currentId ? 'Edit' : 'Create' } Post</FormHeading>
             <InputBox>
                <div>
                     <span className="label"><CreatorLabel htmlFor="creator">Creator</CreatorLabel></span>
@@ -69,16 +84,13 @@ const Form = () => {
                 </div>
             </InputBox>
             <FileBox>
-                <FileInput 
-                    className="file-input" 
-                    accept="image/*" 
-                    name="selectedFile" 
-                    type="file" 
-                    onChange={(e) => setPostData({...postData, selectedFile: toString(e.target.value)})} 
+                <FileBase64 
+                    type="file"
+                    multiple={false}
+                    onDone={({base64}) => setPostData({...postData, selectedFile: base64})}
                 />
-                {/* <label htmlFor="selectedFile">Choose a file...</label> */}
             </FileBox>
-            <SubmitButton onSubmit={onSubmit} type="submit" >Upload</SubmitButton>
+            <SubmitButton onClick={onSubmit} type="submit" >Submit</SubmitButton>
         </PostForm>
     </>
 };
@@ -92,6 +104,7 @@ const FormHeading = styled.h2`
 const PostForm = styled.form`
     /* font-family: ; */
     display: flex;
+    /* background-color: #6867AC; */
     flex-direction: column;
     align-content: space-between;
 `;
