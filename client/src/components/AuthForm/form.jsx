@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import ManLaptop from "../../assets/form-background/man-laptop.jpg";
 import validator from "validator";
@@ -17,6 +17,7 @@ const AuthForm = (props) => {
         password: "",
         confPassword: ""        
     })
+    const navigate = useNavigate();
 
     console.log(props)
     //display props
@@ -56,13 +57,21 @@ const AuthForm = (props) => {
     function userSubmit(e) {
         e.preventDefault();
         if(validator.isEmail(userData.email) && props.formHeading === 'Signup'){
-            dispatch(userSignUp(userData));
-            console.log("Emial valid signUp successful");
-            res.redirect("/");
+            if((userData.password).length>5 && (userData.confPassword).length>5) {
+                dispatch(userSignUp(userData));
+                console.log("Emial valid signUp successful");
+                navigate("/");
+            } else {
+                console.log("password too short")
+            }
         }else if (validator.isEmail(userData.email) && props.formHeading === 'Login') { 
-            dispatch(userSignIn(userData));
-            console.log("Emial valid logIn successful");
-            res.redirect("/");
+            if((userData.password).length !== 0) {
+                dispatch(userSignIn(userData));
+                console.log("Emial valid logIn successful");
+                navigate("/");
+            } else {
+                console.log("Type password")
+            }
         } else {
             console.log("Emial Invalid");
         }
@@ -84,12 +93,12 @@ const AuthForm = (props) => {
                 {/* password */}
                 <PasswordWraper>
                     <PasswordInput 
-                      value={userData.confPassword} 
+                      value={userData.password} 
                       name="password" 
                       type={passowrdType} 
                       autoComplete="off" 
                       placeholder={props.passwordPlaceholder} 
-                      onChange={(e) => setUserData({...userData, confPassword: e.target.value})}
+                      onChange={(e) => setUserData({...userData, password: e.target.value})}
                     />
                     {showPassword 
                     ? <StikedEyeIcon onClick={HidePassword}/> 
@@ -102,7 +111,7 @@ const AuthForm = (props) => {
                       name="confirmPassword" 
                       type={confPassType} 
                       placeholder={props.confPassPlaceholder} 
-                      onChange={(e) => setUserData({...userData, password: e.target.value})}
+                      onChange={(e) => setUserData({...userData, confPassword: e.target.value})}
                     />
                     {showConfPass 
                     ? <StikedEyeIcon onClick={HideConfPassword}/> 

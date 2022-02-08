@@ -1,10 +1,10 @@
-export default (user = {}, action) => {
+export default (user = "", action) => {
     switch (action.type) {
         case 'SIGN-UP':
-            return user(action.payload)
+            return action.payload;
             break;
         case 'SIGN-IN':
-            return user(action.payload)
+            return action.payload;
             break;
         default:
             return user;

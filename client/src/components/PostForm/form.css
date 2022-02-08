@@ -27,3 +27,21 @@
     border: none !important;
     border-style: none !important;
 }
+
+.show {
+    transition: 0.3s !important;
+    display: flex !important;
+}
+
+.hide {
+    transition: 0.3s !important;
+    display: none !important;
+}
+
+
+@media screen and (min-width: 900px) {
+    .hide {
+        transition: 0.3s !important;
+        display: flex !important;
+    }     
+}

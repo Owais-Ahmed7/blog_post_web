@@ -16,7 +16,7 @@ import { useDispatch } from "react-redux";
 import { deletePost } from "../../store/actions/posts";
 
 
-function PostCard({post, setCurrentId, finishPost, setFinishPost}) {
+function PostCard({post, setCurrentId, finishPost, setFinishPost, setShowForm}) {
 
   const dispatch = useDispatch();
 
@@ -37,7 +37,10 @@ function PostCard({post, setCurrentId, finishPost, setFinishPost}) {
         }
         action={
           <IconButton 
-            onClick={() => setCurrentId(post._id)} 
+            onClick={() => {
+              setCurrentId(post._id); 
+              setShowForm(true);
+            }} 
             aria-label="settings"
           >
             <MoreVertIcon />

@@ -5,10 +5,14 @@
     /* display: flex; */
 }
 
+.navbar-brand a {
+    text-decoration: none;
+}
+
 .navbar-items {
     height: 80px;
     display: flex;
-    justify-content: space-between;
+    /* justify-content: space-around; */
     /* padding: 0 5rem; */
     align-items: center;
     font-size: 1.2rem;
@@ -16,6 +20,7 @@
 
 .nav-menu {
     display: grid;
+    margin-left: auto;
     grid-template-columns: repeat(5, auto);
     grid-gap: 20px;
     list-style: none;
@@ -44,6 +49,24 @@
 
 .menu-icon {
     display: none;
+}
+
+.avatar {
+    background: rgb(88, 86, 86);
+    padding: 0.6rem 1rem;
+    color: #fff;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.avatar:hover {
+    opacity: 0.7;
+}
+
+@media screen and (min-width: 900px) {
+    .upload-post {
+        display: none;
+    }
 }
 
 @media screen and ( max-width: 760px ) {
@@ -97,5 +120,21 @@
         transform: translate(-100%, 60%);
         font-size: 1.8rem;
         cursor: pointer;
+    }
+
+    .avatar {
+        margin-left: 30%;
+    }
+}
+
+@media screen and (max-width: 580px) {
+    .avatar {
+        margin-left: 20%;
+    }
+}
+
+@media screen and (max-width: 380px) {
+    .navbar-brand {
+       font-size: 1.5rem; 
     }
 }

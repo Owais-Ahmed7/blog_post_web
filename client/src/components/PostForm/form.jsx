@@ -6,7 +6,7 @@ import { createPost, updatePost } from "../../store/actions/posts";
 import FileBase64 from "react-file-base64"
 
 
-const Form = ({ currentId, setCurrentId, setPostCreated, postCreated }) => {
+const Form = ({ currentId, setCurrentId, setPostCreated, postCreated, showForm, setShowForm }) => {
 
     const [postData, setPostData] = useState({
         creator: "",
@@ -26,16 +26,18 @@ const Form = ({ currentId, setCurrentId, setPostCreated, postCreated }) => {
         e.preventDefault();
         if(currentId) {
             dispatch(updatePost(currentId, postData));
+            setShowForm(false);
         }else {
             dispatch(createPost(postData));
             setPostCreated(!postCreated);
+            setShowForm(false);
         }
         setPostData({ creator:"", title:"",message: "",tags: "",selectedFile: ""});
         setCurrentId(null);
     }
 
     return <>
-        <PostForm methode="Post" path="http://localhost:5000/posts/">
+        <PostForm className={showForm ? "show" : "hide"} methode="Post" path="http://localhost:5000/posts/">
             <FormHeading>{ currentId ? 'Edit' : 'Create' } Post</FormHeading>
             <InputBox>
                <div>
@@ -107,6 +109,7 @@ const PostForm = styled.form`
     /* background-color: #6867AC; */
     flex-direction: column;
     align-content: space-between;
+    transition: 0.3s;
 `;
 
 const InputBox = styled.div`
