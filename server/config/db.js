@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import postSchema from "../models/blogPost.model.js";
 import userSchema from "../models/user.model.js";
 import { config } from "dotenv";
+// import encrypt from "mongoose-encryption";
 
 config();
 

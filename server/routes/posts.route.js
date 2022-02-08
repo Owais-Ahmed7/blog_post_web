@@ -1,13 +1,13 @@
 import express from "express";
-import { getRoute, postRoute, updateRoute, deleteRoute } from "../controllers/posts.js";
+//Posts controller
+import { getPosts, createPost, updatePost, deletePost } from "../controllers/posts.js";
 
 const router = express.Router();
 
-//Api routes
-router.get("/", getRoute)
-      .post("/", postRoute)
-      .put("/", updateRoute)
-      .delete("/", deleteRoute);
-
+//Api post routes
+router.get("/", getPosts)
+      .post("/", createPost)
+      .patch("/:id", updatePost)
+      .delete("/:id", deletePost);
 
 export default router;

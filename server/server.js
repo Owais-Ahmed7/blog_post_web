@@ -2,7 +2,9 @@ import express from "express";
 import cors from "cors";
 import { connectDB } from "./config/db.js";
 
-import apiRoutes from "./routes/posts.route.js";
+//api routes
+import postRoutes from "./routes/posts.route.js";
+import userRoutes from "./routes/user.route.js";
 
 const app = express();
 
@@ -17,7 +19,8 @@ app.use(cors());
 connectDB;
 
 //application routes
-app.use("/posts", apiRoutes);
+app.use("/posts", postRoutes);
+app.use("/auth", userRoutes);
 
 
 //port listening

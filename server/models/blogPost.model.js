@@ -17,7 +17,7 @@ const postSchema = new mongoose.Schema ({
         type: [String],
         required: true 
     },
-    Image: {
+    selectedFile: {
         type: String,
         required: true 
     },
